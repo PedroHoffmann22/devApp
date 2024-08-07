@@ -1,103 +1,59 @@
 import React from "react";
-import { Text, View, Button } from 'react-native';
+import { Text, View, Button, StyleSheet, Image } from 'react-native';
 import { TextInput } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import {useState} from "react"
 
-const style = function (){
-    return({
-        container: {
-            flex: 1,
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: 50,
+const style = StyleSheet.create ({
+    container:{
+        flex:1,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
-        row:{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: 10,
+    logo:{
+        width: 150,
+        height: 150,
     },
-        buttonWidth:{
-            width: 5
-        },
-        input: {
-            height: 40,
-            margin: 12,
-            borderWidth: 1,
-            padding: 10,
-          },
+    gradient: {
+        ...StyleSheet.absoluteFillObject,
+    },
+    gradientTop: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: '30%',
+        backgroundColor: 'brown', 
+    },
+gradientBottom: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: '70%',
+    backgroundColor: 'black',
+},
+background: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    height: 880,
+},
+    
 })
+
+const splashScreen = function () {
+    return <View style={style.container}>
+        <LinearGradient
+        colors={['#ffe6a7', '#252422']}
+        style={style.background}
+        />
+        <Image
+        style={style.stretch}
+        source={require('../../assets/images/fusca.jpg')}
+      />
+    </View>
 }
 
-export default helloWorld = function(){
-        const [text, onChangeText] = useState('Useless Text');
-        const [number1, onChangeNumber1] = useState('');
-        const [number2, onChangeNumber2] = useState('');
-        const [resultado, setResultado] = useState('');
-    
-        const soma = function(){
-             setResultado (Number(number1) + Number(number2))
-             onChangeNumber1 ('')
-             onChangeNumber2('')
-             return true
-        }
-        const subtracao = function(){
-             setResultado (Number(number1) - Number(number2))
-             onChangeNumber1 ('')
-             onChangeNumber2('')
-             return true
-        }
-        const multiplicacao = function(){
-             setResultado (Number(number1) * Number(number2))
-             onChangeNumber1 ('')
-             onChangeNumber2('')
-             return true
-        }
-        const divisao = function(){
-             setResultado (Number(number1) / Number(number2))
-             onChangeNumber1 ('')
-             onChangeNumber2('')
-             return true
-        }
-        console.log(resultado)
-
-    return(
-        <View style={style().container}>
-            <Text>CALCULADORA</Text>
-            <Text>Digite 2 numeros</Text>
-                <View style={style().row}>
-                <TextInput style={style().input}
-                onChangeText={onChangeNumber1}
-                value={number1}
-        placeholder="Primeiro numero"
-        keyboardType="numeric"
-      />
-                <TextInput style={style().input}
-                onChangeText={onChangeNumber2}
-                value={number2}
-        placeholder="Segundo numero"
-        keyboardType="numeric"
-      />
-                    
-            </View>
-            <View style={style().row}>
-                <Button style={style().buttonWidth}
-              
-                onPress={() => soma()}
-                title="+"/>
-                
-                <Button
-                onPress={() => subtracao()}
-                title="-"/>
-                <Button
-                onPress={() => multiplicacao()}
-                title="*"/>
-                <Button
-                onPress={() => divisao()}
-                title="/"/>
-            </View>
-            <Text>Seu resultado é:{resultado}</Text>
-        </View>
-        
-    )
-    
-}
+export default splashScreen
