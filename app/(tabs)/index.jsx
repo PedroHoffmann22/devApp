@@ -1,59 +1,97 @@
-import React from "react";
-import { Text, View, Button, StyleSheet, Image } from 'react-native';
-import { TextInput } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import {useState} from "react"
+import React, { useState } from 'react';
+import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 
-const style = StyleSheet.create ({
-    container:{
-        flex:1,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    logo:{
-        width: 150,
-        height: 150,
-    },
-    gradient: {
-        ...StyleSheet.absoluteFillObject,
-    },
-    gradientTop: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: '30%',
-        backgroundColor: 'brown', 
-    },
-gradientBottom: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: '70%',
-    backgroundColor: 'black',
-},
-background: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
-    top: 0,
-    height: 880,
-},
-    
-})
+const App = () => {
+  const [input, setInput] = useState('');
+  const [resultado, setResultado] = useState('');
+  const [activeButton, setActiveButton] = useState(null);
 
-const splashScreen = function () {
-    return <View style={style.container}>
-        <LinearGradient
-        colors={['#ffe6a7', '#252422']}
-        style={style.background}
-        />
-        <Image
-        style={style.stretch}
-        source={require('../../assets/images/fusca.jpg')}
-      />
+  const handlePress = (value) => {
+    setInput(input + value);
+  };
+
+  const clearInput = () => {
+    setInput('');
+    setResultado('');
+  };
+
+  const calculateResult = () => {
+    try {
+      setResultado(eval(input));
+    } catch {
+      setResultado('Error');
+    }
+  };
+
+  const handleMouseEnter = (index) => {
+    setActiveButton(index);
+  };
+
+  const handleMouseLeave = () => {
+    setActiveButton(null);
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.visor}>{input || '0'}</Text>
+      <Text style={styles.resultado}>Resultado: {resultado}</Text>
+      {[['1', '2', '3', '+'], ['4', '5', '6', '-'], ['7', '8', '9', '*'], ['=', '0', '/', 'C']].map((row, rowIndex) => (
+        <View key={rowIndex} style={styles.buttonRow}>
+          {row.map((value, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[styles.button, activeButton === `${rowIndex}-${index}` && styles.shadow]}
+              onPress={() => (value === 'C' ? clearInput() : value === '=' ? calculateResult() : handlePress(value))}
+              onMouseEnter={() => handleMouseEnter(`${rowIndex}-${index}`)}
+              onMouseLeave={handleMouseLeave}
+            >
+              <Text style={styles.buttonText}>{value}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      ))}
     </View>
-}
+  );
+};
 
-export default splashScreen
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    backgroundColor: '#f5f5f5',
+  },
+  visor: {
+    fontSize: 40,
+    backgroundColor: '#e0e0e0',
+    width: '80%',
+    textAlign: 'right',
+    marginBottom: 10,
+    padding: 10,
+    borderRadius: 5,
+  },
+  resultado: {
+    fontSize: 30,
+    marginBottom: 20,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-around',
+    marginBottom: 10,
+  },
+  button: {
+    width: '18%',
+    backgroundColor: '#ddd',
+    padding: 20,
+    alignItems: 'center',
+    margin: 5,
+    borderRadius: 50,
+  },
+  buttonText: {
+    fontSize: 20,
+  },
+});
+
+export default App;
